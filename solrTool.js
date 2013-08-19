@@ -4,12 +4,33 @@
  var exec = require('child_process').exec;
  var prompt = require('prompt');
  var solr = require('solr-client');
- var solrSearch = require('./lib/solrSearch');
+ var promptProperties= require("./prompt_properties");
+
+ console.log("TESTE: "+promptProperties.index;
+ 
+
+ var properties = {};
+     properties['start']=[
+        {
+          name: 'port', 
+          validator:  /[\d]/,
+          warning: 'PortNumber'
+        },
+        {
+          name: 'version',
+          validator: /[\d]/,
+          warning: 'Version of Solr, accepts only main version, ex: 4 or 3'
+        }
+      ];
 
 
   var command=process.argv[2];
   // print process.argv
   console.log("Comando: "+command);
+  if(undefined == command){
+    console.log("Listando comandos...");
+    return;
+  }
 
   if("start" == command){
      var properties = [
@@ -31,20 +52,10 @@
         console.log('Command-line input received:');
         console.log('  Query: ' + result.port);
         console.log('  Core: ' + result.version);
-
-        function puts(error, stdout, stderr) {  console.log(stdout);}
-        if("4" == result.version){
-          exec("cd /Users/gbueno1_dsv/Documents/dev/projects/search/solr/solr-4.4.0/example; java -jar -Dsolr.solr.home=marketplace -Djetty.port="+result.port+" start.jar", puts);        
-        }
-
-        if("3" == result.version){
-          exec("cd /Users/gbueno1_dsv/Documents/dev/projects/search/solr/apache-solr-3.6.2/example; java -jar -Dsolr.solr.home=solrConf  -Djetty.port="+result.port+"  start.jar", puts);        
-        }
       });
   }
 
-  if("search" == command){
-    /*#######################################*/      
+  if("search" == command){    
         var properties = [
         {
           name: 'query', 
@@ -73,17 +84,7 @@
         console.log("####################################################################")
         console.log("##################          RESULTS         ########################")
         console.log("####################################################################")
-        client.search(query2,function(err,obj){
-           if(err){
-            console.log(err);
-           }else{
-            console.log("Total: "+obj.response.numFound);
-            var docs = obj.response.docs;
-            docs.forEach( function(document, index){
-              console.log(index+" => "+document.id+ " || " +document.name + " || "+ document.categoryName);
-            });
-           }
-        });
+        
       });
    /*#######################################*/      
   }
