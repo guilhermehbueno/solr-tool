@@ -5,115 +5,56 @@
  var prompt = require('prompt');
  var solr = require('solr-client');
  var promptProperties= require("./prompt_properties");
-
- console.log("TESTE: "+promptProperties.index;
- 
-
- var properties = {};
-     properties['start']=[
-        {
-          name: 'port', 
-          validator:  /[\d]/,
-          warning: 'PortNumber'
-        },
-        {
-          name: 'version',
-          validator: /[\d]/,
-          warning: 'Version of Solr, accepts only main version, ex: 4 or 3'
-        }
-      ];
-
-
-  var command=process.argv[2];
-  // print process.argv
-  console.log("Comando: "+command);
+ var SolrCommand= require("./solrCommand");
+ var Map = require("collections/map");
+ var map = new Map();
+ var command=process.argv[2];
+ console.log("Comando: "+command);
   if(undefined == command){
     console.log("Listando comandos...");
     return;
   }
 
-  if("start" == command){
-     var properties = [
-        {
+  /*Instanciando commands*/
+  var search = new SolrCommand("search");
+  var start = new SolrCommand("start");
+
+  start.prototype.execute=function(){
+    console.log("guilherme");
+  }
+
+  /*Atribuindo ao map*/
+  map.set(search.getName(), search);
+  map.set(start.getName(), start);
+
+  start.config([{
           name: 'port', 
           validator:  /[\d]/,
           warning: 'PortNumber'
         },
         {
-          name: 'version',
-          validator: /[\d]/,
-          warning: 'Version of Solr, accepts only main version, ex: 4 or 3'
-        }
-      ];
+          name: 'host', 
+          validator:  /[\d]/,
+          warning: 'PortNumber'
+        }]);
 
-       prompt.start();
-
-      prompt.get(properties, function (err, result) {
-        console.log('Command-line input received:');
-        console.log('  Query: ' + result.port);
-        console.log('  Core: ' + result.version);
-      });
-  }
-
-  if("search" == command){    
-        var properties = [
-        {
+  search.config([{
           name: 'query', 
           validator: /^[a-zA-Z\s\-]+$/,
-          warning: 'Username must be only letters, spaces, or dashes'
+          warning: 'PortNumber'
         },
         {
-          name: 'core',
+          name: 'core', 
           validator: /^[a-zA-Z\s\-]+$/,
-          warning: 'Username must be only letters, spaces, or dashes'
-        }
-      ];
-      //console.log("solrSearch: "+ solrSearch.teste);
-      prompt.start();
-
-      prompt.get(properties, function (err, result) {
-        if (err) { return onErr(err); }
-        console.log('Command-line input received:');
-        console.log('  Query: ' + result.query);
-        console.log('  Core: ' + result.core);
-        var client = solr.createClient('127.0.0.1', '8983', result.core);
-        var query2 = client.createQuery()
-                           .q({name: result.query})
-                           .start(0)
-                           .rows(10);
-        console.log("####################################################################")
-        console.log("##################          RESULTS         ########################")
-        console.log("####################################################################")
-        
-      });
-   /*#######################################*/      
-  }
-
-  if("register" == command){
-    /*#######################################*/      
-         var properties = [
-        {
-          name: 'name', 
-          validator: /^[a-zA-Z\s\-]+$/,
-          warning: 'Username must be only letters, spaces, or dashes'
-        },
-        {
-          name: 'repository',
-          validator: /^[a-zA-Z\s\-]+$/,
-          warning: 'Username must be only letters, spaces, or dashes'
-        }
-      ];
+          warning: 'PortNumber'
+        }]);
 
       prompt.start();
-
-      prompt.get(properties, function (err, result) {
-        if (err) { return onErr(err); }
+      var commandInstance=map.get(command);
+      prompt.get(commandInstance.getConfig(), function (err, result) {
         console.log('Command-line input received:');
-        console.log('  Name: ' + result.name);
-        console.log('  Repository: ' + result.repository);
+        commandInstance.execute();
       });
-   /*#######################################*/      
-  }
 
   
   function onErr(err) {

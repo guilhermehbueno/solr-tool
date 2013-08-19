@@ -9,6 +9,7 @@
     "prompt": "0.2.11",
     "solr-client": "*",
     "jquery": "*",
-    "solr2solr" : "*"
+    "solr2solr" : "*",
+    "collections": "*"
   }
 }
