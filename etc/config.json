@@ -1,0 +1,18 @@
+{
+	"cores": [
+		{
+			"name": "solr4",
+			"port": "8984",
+			"host": "localhost",
+			"path": "/Users/gbueno1_dsv/Documents/dev/projects/search/solr/solr-4.4.0/example",
+			"description": "Solr na versao 4.4"
+		},
+		{
+			"name": "solr3",
+			"port": "8983",
+			"host": "localhost",
+			"path": "/Users/gbueno1_dsv/Documents/dev/projects/search/solr/apache-solr-3.6.2/example",
+			"description": "Solr na versao 3.6"
+		}
+	]
+}
